@@ -1,0 +1,239 @@
+Awesome, let’s now go through **Assignment No. 4** from the PDF you uploaded, and explain it clearly step by step, just like we did for Assignment 3. This one is about building a **custom Salesforce app** using point-and-click (declarative tools), not Apex coding.
+
+---
+
+## 🔍 Assignment 4: Design and Develop Custom Application (Mini Project) using Salesforce Cloud
+
+---
+
+### 🎯 Objective
+
+Create a custom application in Salesforce using **point-and-click tools** — no code. This involves:
+- Creating a custom object (like a table)
+- Creating tabs and apps to manage it
+- Testing it in both web and mobile views
+
+---
+
+## ✅ Step-by-Step Detailed Guide
+
+---
+
+### 🔹 Step 1: Open Salesforce (Lightning Experience)
+
+Make sure you are in **Lightning Experience** (modern UI of Salesforce):
+1. Log in to [https://login.salesforce.com](https://login.salesforce.com)
+2. Switch to **Lightning** (if not already there) by clicking on your avatar > "Switch to Lightning Experience"
+
+---
+
+### 🔹 Step 2: Create a Custom Object
+
+You’re building a "Comment Box" app, so first create a **custom object**:
+
+1. Click on the **gear icon (⚙️)** → then click **Setup**.
+2. In the **Quick Find box**, type **Objects** and click **Object Manager**.
+3. Click **Create → Custom Object**.
+4. Fill out the form as below:
+
+| Field            | Value             |
+|------------------|------------------|
+| Label            | `Comment`        |
+| Plural Label     | `Comments`       |
+| Object Name      | auto-filled as `Comment__c` |
+| Record Name      | `Comment Name` (or anything suitable) |
+| Data Type        | `Text` (or Text Area if it's a full comment) |
+| Allow Reports    | ✅ Check this |
+| Launch New Tab   | ✅ Check this (optional) |
+| Deployment Status| Deployed         |
+
+5. Click **Save**.
+
+✅ You now have a custom object in Salesforce that represents comments.
+
+---
+
+### 🔹 Step 3: Create a Custom Tab for Your Object
+
+1. In **Setup**, search for **Tabs** in the Quick Find box.
+2. Click on **Tabs**.
+3. Under **Custom Object Tabs**, click **New**.
+4. Set up the tab:
+
+| Field        | Value                |
+|--------------|----------------------|
+| Object       | `Comment`            |
+| Tab Style    | Choose any icon you like |
+| Description  | (Optional) Add one   |
+
+5. Click **Next → Next → Save**.
+
+✅ Now you can view and interact with "Comments" from the UI like any built-in object (e.g., Accounts).
+
+---
+
+### 🔹 Step 4: Create a Custom App for the Mini Project
+
+1. In **Setup**, search for **App Manager**.
+2. Click **App Manager**.
+3. Click **New Lightning App** (top right).
+4. Fill out the form:
+
+#### Section 1: App Details
+| Field | Value |
+|-------|-------|
+| App Name | `Comment Box` |
+| App Label | `Comment Box` |
+| Description | (Optional) |
+
+Click **Next**.
+
+#### Section 2: App Options
+
+- Leave the default options selected
+- Click **Next**
+
+#### Section 3: Navigation Items
+
+- Search for and select:  
+  ✅ `Contacts`  
+  ✅ `Comment` (the custom object)
+
+Click **Next**.
+
+#### Section 4: Assign User Profiles
+
+- Select: ✅ **System Administrator**
+- Move it to the "Selected Profiles" side
+- Click **Save and Finish**
+
+✅ Now you've created a full app to manage comments.
+
+---
+
+### 🔹 Step 5: Use the App (Web & Mobile)
+
+#### 🖥 Web View
+
+1. Go to the **App Launcher (9-dot grid icon)**.
+2. Search for and click **Comment Box**.
+3. You'll see the app you just built with tabs for **Contacts** and **Comments**.
+
+#### 📱 Simulate Mobile View
+
+Salesforce has a mobile app, but you can **simulate it in Chrome**:
+
+1. Open your **Comment Box app** in Chrome.
+2. Right-click anywhere on the screen and click **Inspect**.
+3. In Developer Tools, click the **Toggle Device Toolbar (mobile icon)**.
+4. Reload the page if needed.
+
+✅ Now you can test how your app would look in the **Salesforce Mobile App**.
+
+---
+
+### 🔹 Step 6: Add a Comment Record
+
+1. In the app, go to the **Comments tab**.
+2. Click **New**.
+3. Fill in the comment data and click **Save**.
+
+🎉 You've now created your first comment record using your custom app!
+
+---
+
+## ✅ Conclusion
+
+You have:
+- Designed a custom object (`Comment`)
+- Created a tab and added it to a new Lightning App
+- Simulated a mobile version
+- Created and saved data records
+
+This is how Salesforce allows **non-developers** to build apps quickly using clicks, not code.
+
+---
+
+## 📌 Feedback & Suggestions
+
+| Area | Feedback |
+|------|----------|
+| 💡 Object Design | You could add fields like `User`, `Date`, or `Related Contact` to make the comment more meaningful. |
+| 🎨 UI | Try customizing the page layout to show key fields at the top. |
+| 🔐 Security | Use **Profiles or Permission Sets** to control who can see or edit comments. |
+| 📱 Mobile | Explore real Salesforce Mobile App if you have a device – it's free and works great for testing. |
+
+---
+
+Would you like help **adding related fields** (like linking a comment to a contact or case), or making the UI more user-friendly with record types or page layouts?
+
+
+
+
+
+public class CreateAccount {
+    public String name {get; set;}
+    public String phoneNumber {get; set;}
+    public String selectedname {get; set;}
+    public String websiteURL {get; set;}
+    public List<Selectoption> lstnamesel {get; set;}
+
+    public CreateAccount(ApexPages.StandardController controller) {
+        lstnamesel = new List<selectoption>();
+        lstnamesel.add(new selectOption('','- None -'));
+        lstnamesel.add(new selectOption('IT','IT'));
+        lstnamesel.add(new selectOption('MECH','MECH'));
+        lstnamesel.add(new selectOption('CHEM','CHEM'));
+        lstnamesel.add(new selectOption('PHARMA','PHARMA'));
+    }
+
+    public PageReference createAccount() {
+        System.debug('teset create');
+        if(!String.isEmpty(name)) {
+            Account accountRecord = new Account(Name = name,
+                Phone = phoneNumber,
+                Industry = selectedname,
+                Website = websiteURL);
+            INSERT accountRecord;
+            PageReference pg = new PageReference('/'+accountRecord.Id);
+            pg.setRedirect(true);
+            return pg;
+        } else {
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,'Please enter Account Name'));
+        }
+        return NULL;
+    }
+
+    public PageReference cancelAccount() {
+        PageReference pg = new PageReference('/'+Schema.SObjectType.Account.getKeyPrefix()+'/o');
+        return pg;
+    }
+}
+
+
+
+
+
+
+<apex:page standardController="Account" extensions="CreateAccount">
+    <apex:form id="apexFrom" >
+        <apex:pageBlock title="Create Account:" id="pageBlockId">
+            <apex:pageMessages id="showmsg"></apex:pageMessages>
+            <apex:pageBlockSection columns="2" >
+                <apex:inputText value="{!name}" label="Account Name" required="true"/>
+                <apex:inputText value="{!phoneNumber}" label="Phone" />
+                <apex:selectList size="1" value="{!selectedname}" label="Industry">
+                    <apex:selectOptions value="{!lstnamesel}"/>
+                </apex:selectList>
+                <apex:inputText value="{!websiteURL}" label="Website" />
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!createAccount}" value="Save"/>
+                <apex:commandButton action="{!cancelAccount}" value="Cancel"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <!-- ACTION FUNCTIONS-->
+        <apex:actionFunction name="createFunction" action="{!createAccount}"/>
+        <apex:actionFunction name="cancelFunction" action="{!cancelAccount}"/>
+    </apex:form>
+</apex:page>
